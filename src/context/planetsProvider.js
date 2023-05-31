@@ -4,9 +4,10 @@ import PlanetsContext from './planetsContext';
 import fetchApi from '../services/fetchApi';
 
 function PlanetsProvider({ children }) {
-  const [planets, setPlanets] = useState([]);
-  const [headers, setHeaders] = useState([]);
-  const [nameFilter, setNameFilter] = useState('');
+  const [planets, setPlanets] = useState([]); // array de objetos em que cada objeto é um planeta vindo da API
+  const [headers, setHeaders] = useState([]); // array de strings em que cada string é uma chave dos objetos planetas
+  const [nameFilter, setNameFilter] = useState(''); // string dos caracteres digitados no input de filtro de nome
+  const [filterList, setFilterList] = useState([]); // array de objetos em que cada objeto é um filtro de valor
 
   useEffect(() => {
     const setDataAPI = async () => {
@@ -23,6 +24,8 @@ function PlanetsProvider({ children }) {
     headers,
     nameFilter,
     setNameFilter,
+    filterList,
+    setFilterList,
   };
 
   return (
