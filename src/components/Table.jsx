@@ -1,8 +1,16 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import PlanetsContext from '../context/planetsContext';
 
 function Table() {
-  const { planets, headers } = useContext(PlanetsContext);
+  const { planets, headers, nameFilter } = useContext(PlanetsContext);
+  const [filteredPlanets, setFilteredPlanets] = useState(planets);
+
+  useEffect(() => {
+    const filterByName = planets
+      .filter(({ name }) => name.toLowerCase().includes(nameFilter.toLowerCase()));
+    setFilteredPlanets(filterByName);
+  }, [planets, nameFilter]);
+
   return (
     <table>
       <thead>
@@ -14,7 +22,7 @@ function Table() {
       </thead>
       <tbody>
         {
-          planets.map((planet) => (
+          filteredPlanets.map((planet) => (
             <tr key={ planet.name }>
               {(Object.values(planet)).map((item, index) => (
                 <td key={ index }>{ item }</td>

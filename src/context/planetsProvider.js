@@ -6,6 +6,7 @@ import fetchApi from '../services/fetchApi';
 function PlanetsProvider({ children }) {
   const [planets, setPlanets] = useState([]);
   const [headers, setHeaders] = useState([]);
+  const [nameFilter, setNameFilter] = useState('');
 
   useEffect(() => {
     const setDataAPI = async () => {
@@ -20,6 +21,8 @@ function PlanetsProvider({ children }) {
   const valueContext = {
     planets,
     headers,
+    nameFilter,
+    setNameFilter,
   };
 
   return (
