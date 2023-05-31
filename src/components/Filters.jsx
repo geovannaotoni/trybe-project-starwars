@@ -5,13 +5,14 @@ function Filters() {
   const {
     setNameFilter,
     setFilterList, // função que seta o array de filtros (é um array de objetos em que cada objeto é um filtro)
+    filterList,
   } = useContext(PlanetsContext);
 
   // constante com as dropdown lists para cada input
   const columns = [
     'population', 'orbital_period', 'diameter', 'rotation_period', 'surface_water',
   ];
-  const comparison = ['maior que', 'igual a', 'menor que'];
+  const comparisons = ['maior que', 'igual a', 'menor que'];
 
   // cria um state local que é um objeto contendo os valores dos filtros de coluna, comparação e valor
   const [numberFilter, setNumberFilter] = useState({
@@ -73,7 +74,7 @@ function Filters() {
             value={ numberFilter.comparison }
             onChange={ handleChange }
           >
-            {comparison.map((comp) => (
+            {comparisons.map((comp) => (
               <option value={ comp } key={ comp }>
                 {comp}
               </option>
@@ -98,6 +99,12 @@ function Filters() {
         >
           Filtrar
         </button>
+      </article>
+      <article>
+        <h4>Filtros pesquisados:</h4>
+        {filterList.map(({ column, comparison, value }, index) => (
+          <p key={ index }>{`${column} ${comparison} ${value}`}</p>
+        ))}
       </article>
     </section>
   );
