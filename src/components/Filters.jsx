@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import PlanetsContext from '../context/planetsContext';
 
 function Filters() {
@@ -8,15 +8,17 @@ function Filters() {
     filterList,
   } = useContext(PlanetsContext);
 
-  // constante com as dropdown lists para cada input
-  const columns = [
+  // cria um state local com a dropdown list para o select de colunas
+  const [columns, setColumns] = useState([
     'population', 'orbital_period', 'diameter', 'rotation_period', 'surface_water',
-  ];
+  ]);
+
+  // constante com a dropdown list para o select de comparação
   const comparisons = ['maior que', 'igual a', 'menor que'];
 
   // cria um state local que é um objeto contendo os valores dos filtros de coluna, comparação e valor
   const [numberFilter, setNumberFilter] = useState({
-    column: 'population',
+    column: columns[0],
     comparison: 'maior que',
     value: 0,
   });
@@ -29,14 +31,29 @@ function Filters() {
     }));
   };
 
-  // ao clicar no botão de filtrar, ele seta no array FilterList o objeto contendo os dados de coluna, comparação e valor
+  // ao clicar no botão de filtrar:
   const handleClick = () => {
     // console.log(numberFilter);
+    // filtra as colunas removendo a coluna já selecionada da lista, depois seta a nova lista no state local
+    const newColumns = columns.filter((col) => col !== numberFilter.column);
+    // console.log(newColumns);
+    setColumns(newColumns);
+
+    // seta no array FilterList o objeto contendo os dados de coluna, comparação e valor
     setFilterList((prevFilter) => ([
       ...prevFilter,
       numberFilter,
     ]));
   };
+
+  // utiliza-se a useEffect para que, sempre que o estado columns for atualizado, o valor inicial do filtro de número será atualizado para o primeiro elemento do array atualizado columns, o comparison volta a ser o primeiro dropdown e o value volta a ser 0.
+  useEffect(() => {
+    setNumberFilter({
+      column: columns[0] || '', // sempre será o primeiro elemento do array ou uma string vazia se o array não tiver nenhum elemento
+      comparison: 'maior que',
+      value: 0,
+    });
+  }, [columns]);
 
   return (
     <section>
@@ -96,6 +113,7 @@ function Filters() {
           data-testid="button-filter"
           type="button"
           onClick={ handleClick }
+          disabled={ columns.length === 0 }
         >
           Filtrar
         </button>
