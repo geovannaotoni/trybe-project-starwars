@@ -159,7 +159,6 @@ describe('Testes para o componente Filters', () => {
   })
 
   it('Verifica se ao selecionar todos os filtros possíveis, o dropdown de colunas fica sem nenhuma option', () => {
-
     const btnFilter = screen.getByTestId('button-filter');
     const selectColumn = screen.getByTestId('column-filter');
     // Acessando as options por meio do HTMLCollection para verificar quantas options estão presentes na coleção select.
@@ -171,7 +170,7 @@ describe('Testes para o componente Filters', () => {
     expect(selectColumn.options.length).toBe(0);
   })
 
-  it('Verifica se a opção de ordenação funciona corretamente', () => {
+  it('Verifica se a opção de ordenação ascendente funciona corretamente', () => {
     const selectColumnSort = screen.getByTestId('column-sort');
     const radioSortAsc = screen.getByTestId('column-sort-input-asc');
     const btnSort = screen.getByTestId('column-sort-button');
@@ -187,6 +186,28 @@ describe('Testes para o componente Filters', () => {
       if (a.population === 'unknown') return 1; // se 'a' for unknown, retorna o maior numero possivel (1), para que ele vá para o final
       if (b.population === 'unknown') return -1; // se 'b' for unknown, retorna o menor numero possivel (-1), para que ele vá para o final
       return Number(a.population) - Number(b.population); // se a operação der positivo, o 'a' é menor que o 'b' e é colocado antes
+    })
+
+    allPlanetNames.forEach((planetName, index) => {
+      expect(planetName).toHaveTextContent(orderedPlanetNames[index].name);
+    })
+  })
+
+  it('Verifica se a opção de ordenação descendente funciona corretamente', () => {
+    const selectColumnSort = screen.getByTestId('column-sort');
+    const radioSortDesc = screen.getByTestId('column-sort-input-desc');
+    const btnSort = screen.getByTestId('column-sort-button');
+    
+    userEvent.selectOptions(selectColumnSort, 'population');
+    userEvent.click(radioSortDesc);
+    userEvent.click(btnSort);
+
+    const allPlanetNames = screen.getAllByTestId('planet-name');
+
+    const orderedPlanetNames = mockData.results.sort((a, b) => {
+      if (a.population === 'unknown') return 1;
+      if (b.population === 'unknown') return -1;
+      return Number(b.population) - Number(a.population);
     })
 
     allPlanetNames.forEach((planetName, index) => {
