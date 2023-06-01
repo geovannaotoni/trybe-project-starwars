@@ -107,8 +107,10 @@ describe('Testes para o componente Filters', () => {
     expect(screen.getByText(/population maior que 01000/i)).toBeInTheDocument();
 
     // Verifica se a opção 'population' não está presente no select de colunas, já que ela já foi selecionada para o filtro anteriormente
-    const populationOption = screen.queryByRole('option', { name: 'population' });
-    expect(populationOption).not.toBeInTheDocument();
+    const columnOptions = Array.from(selectColumn.options); // array com todas as options do select de colunas
+    columnOptions.forEach((column) => {
+      expect(column).not.toHaveTextContent('population')
+    })
 
     // Ao clicar no botão de deletar o filtro, o filtro é deletado
     const btnDelete = screen.getByRole('button', { name: /x/i });
@@ -138,10 +140,13 @@ describe('Testes para o componente Filters', () => {
     expect(divFilters.length).toBe(2); // uma div para cada filtro
 
     // verifica se as options não estão mais no dropdown list
-    const populationOption = screen.queryByRole('option', { name: 'population' });
-    const orbital_periodOption = screen.queryByRole('option', { name: 'orbital_period' });
-    expect(populationOption).not.toBeInTheDocument();
-    expect(orbital_periodOption).not.toBeInTheDocument();
+    const columnOptions = Array.from(selectColumn.options); // array com todas as options do select de colunas
+    columnOptions.forEach((column) => {
+      expect(column).not.toHaveTextContent('population');
+      expect(column).not.toHaveTextContent('orbital_period');
+    })
+    expect(screen.getAllByRole('option', { name: 'population' }).length).toBe(1);
+    expect(screen.getAllByRole('option', { name: 'orbital_period' }).length).toBe(1);
 
     // remove todos os filtros
     const btnDeleteAll = screen.getByTestId('button-remove-filters');
@@ -149,8 +154,8 @@ describe('Testes para o componente Filters', () => {
     expect(screen.queryAllByTestId('filter')).toHaveLength(0);
 
     // verifica se as options voltam ao dropdown
-    expect(screen.getByRole('option', { name: 'population' })).toBeInTheDocument();
-    expect(screen.getByRole('option', { name: 'orbital_period' })).toBeInTheDocument();
+    expect(screen.getAllByRole('option', { name: 'population' }).length).toBe(2);
+    expect(screen.getAllByRole('option', { name: 'orbital_period' }).length).toBe(2);
   })
 
   it('Verifica se ao selecionar todos os filtros possíveis, o dropdown de colunas fica sem nenhuma option', () => {
@@ -164,5 +169,28 @@ describe('Testes para o componente Filters', () => {
       userEvent.click(btnFilter);
     }
     expect(selectColumn.options.length).toBe(0);
+  })
+
+  it('Verifica se a opção de ordenação funciona corretamente', () => {
+    const selectColumnSort = screen.getByTestId('column-sort');
+    const radioSortAsc = screen.getByTestId('column-sort-input-asc');
+    const btnSort = screen.getByTestId('column-sort-button');
+    
+    userEvent.selectOptions(selectColumnSort, 'population');
+    userEvent.click(radioSortAsc);
+    userEvent.click(btnSort);
+
+    const allPlanetNames = screen.getAllByTestId('planet-name');
+
+    // outra solução para ordenação. Nesse caso, para ordenar de forma crescente:
+    const orderedPlanetNames = mockData.results.sort((a, b) => {
+      if (a.population === 'unknown') return 1; // se 'a' for unknown, retorna o maior numero possivel (1), para que ele vá para o final
+      if (b.population === 'unknown') return -1; // se 'b' for unknown, retorna o menor numero possivel (-1), para que ele vá para o final
+      return Number(a.population) - Number(b.population); // se a operação der positivo, o 'a' é menor que o 'b' e é colocado antes
+    })
+
+    allPlanetNames.forEach((planetName, index) => {
+      expect(planetName).toHaveTextContent(orderedPlanetNames[index].name);
+    })
   })
 });

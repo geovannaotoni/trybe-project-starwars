@@ -8,6 +8,7 @@ function PlanetsProvider({ children }) {
   const [headers, setHeaders] = useState([]); // array de strings em que cada string é uma chave dos objetos planetas
   const [nameFilter, setNameFilter] = useState(''); // string dos caracteres digitados no input de filtro de nome
   const [filterList, setFilterList] = useState([]); // array de objetos em que cada objeto é um filtro de valor
+  const [sortPlanets, setSortPlanets] = useState({}); // objeto para o filtro de ordenação, conterá as chaves column e sort
 
   useEffect(() => {
     const setDataAPI = async () => {
@@ -26,6 +27,8 @@ function PlanetsProvider({ children }) {
     setNameFilter,
     filterList,
     setFilterList,
+    sortPlanets,
+    setSortPlanets,
   };
 
   return (

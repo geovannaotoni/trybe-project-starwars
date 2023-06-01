@@ -2,9 +2,15 @@ import React, { useContext, useEffect, useState } from 'react';
 import PlanetsContext from '../context/planetsContext';
 
 function Table() {
-  const { planets, headers, nameFilter, filterList } = useContext(PlanetsContext);
+  const {
+    planets,
+    headers,
+    nameFilter,
+    filterList,
+    sortPlanets,
+  } = useContext(PlanetsContext);
   const [filteredPlanets, setFilteredPlanets] = useState(planets);
-  // console.log(filterList);
+  // console.log(sortPlanets);
 
   useEffect(() => {
     // filtra a partir do nome digitado no input de nome (utilizando toLowerCase para não ser case-sensitive)
@@ -30,8 +36,34 @@ function Table() {
         });
       });
     }
+    // ordena de acordo com a coluna selecionada e com o tipo de ordenação
+    if (sortPlanets.column) {
+      // console.log(sortPlanets);
+      const planetsWithUnknown = [];
+      const planetsWithValues = [];
+      filteredByName.forEach((planet) => {
+        if (planet[sortPlanets.column] === 'unknown') {
+          planetsWithUnknown.push(planet);
+        } else {
+          planetsWithValues.push(planet);
+        }
+      });
+      // console.log(planetsWithUnknown, planetsWithValues);
+      if (sortPlanets.sort === 'ASC') {
+        planetsWithValues
+          .sort((a, b) => Number(a[sortPlanets.column]) - Number(b[sortPlanets.column]));
+      }
+      if (sortPlanets.sort === 'DESC') {
+        planetsWithValues
+          .sort((a, b) => Number(b[sortPlanets.column]) - Number(a[sortPlanets.column]));
+      }
+      filteredByName = [
+        ...planetsWithValues,
+        ...planetsWithUnknown,
+      ];
+    }
     setFilteredPlanets(filteredByName);
-  }, [planets, nameFilter, filterList]);
+  }, [planets, nameFilter, filterList, sortPlanets]);
 
   return (
     <table>
@@ -46,9 +78,16 @@ function Table() {
         {
           filteredPlanets.map((planet) => (
             <tr key={ planet.name }>
-              {(Object.values(planet)).map((item, index) => (
-                <td key={ index }>{ item }</td>
-              ))}
+              {(Object.values(planet)).map((item, index) => {
+                if (index === 0) {
+                  return (
+                    <td key={ index } data-testid="planet-name">{ item }</td>
+                  );
+                }
+                return (
+                  <td key={ index }>{ item }</td>
+                );
+              })}
             </tr>
           ))
         }

@@ -6,12 +6,14 @@ function Filters() {
     setNameFilter,
     setFilterList, // função que seta o array de filtros (é um array de objetos em que cada objeto é um filtro)
     filterList,
+    setSortPlanets,
   } = useContext(PlanetsContext);
 
   // cria um state local com a dropdown list para o select de colunas
-  const [columns, setColumns] = useState([
+  const initialColumns = [
     'population', 'orbital_period', 'diameter', 'rotation_period', 'surface_water',
-  ]);
+  ];
+  const [columns, setColumns] = useState(initialColumns);
 
   // constante com a dropdown list para o select de comparação
   const comparisons = ['maior que', 'igual a', 'menor que'];
@@ -21,6 +23,12 @@ function Filters() {
     column: columns[0],
     comparison: 'maior que',
     value: 0,
+  });
+
+  // cria um state local que é um objeto que armazena a coluna selecionada e o tipo de ordenação
+  const [sortFilter, setSortFilter] = useState({
+    column: 'population',
+    sort: 'ASC',
   });
 
   // ao digitar no input, altera-se o valor do state local numberFilter, sem perder os demais dados desse state (utlizando o ...prevNumberFilter)
@@ -64,10 +72,16 @@ function Filters() {
 
   // deleta todos os filtros e seta novamente todas as colunas no dropdown
   const handleClickDeleteAll = () => {
-    setColumns([
-      'population', 'orbital_period', 'diameter', 'rotation_period', 'surface_water',
-    ]);
+    setColumns(initialColumns);
     setFilterList([]);
+  };
+
+  // ao alterar o input radio ou o dropdown de coluna para ordenação, ele altera no state local
+  const handleChangeSort = ({ target: { name, value } }) => {
+    setSortFilter((prevSortFilter) => ({
+      ...prevSortFilter,
+      [name]: value,
+    }));
   };
 
   return (
@@ -159,6 +173,52 @@ function Filters() {
       >
         Remover Filtros
       </button>
+      <article>
+        <label htmlFor="column-sort">
+          Ordenar
+          <select
+            name="column"
+            id="column-sort"
+            data-testid="column-sort"
+            onChange={ handleChangeSort }
+          >
+            {initialColumns.map((col) => (
+              <option value={ col } key={ col }>
+                {col}
+              </option>
+            ))}
+          </select>
+        </label>
+        <label htmlFor="column-sort-input-asc">
+          <input
+            type="radio"
+            name="sort"
+            value="ASC"
+            id="column-sort-input-asc"
+            data-testid="column-sort-input-asc"
+            onChange={ handleChangeSort }
+          />
+          Ascendente
+        </label>
+        <label htmlFor="column-sort-input-desc">
+          <input
+            type="radio"
+            name="sort"
+            value="DESC"
+            id="column-sort-input-desc"
+            data-testid="column-sort-input-desc"
+            onChange={ handleChangeSort }
+          />
+          Descendente
+        </label>
+        <button
+          type="button"
+          data-testid="column-sort-button"
+          onClick={ () => setSortPlanets(sortFilter) }
+        >
+          Ordenar
+        </button>
+      </article>
     </section>
   );
 }
