@@ -32,7 +32,7 @@ function Filters() {
   };
 
   // ao clicar no botão de filtrar:
-  const handleClick = () => {
+  const handleClickFilter = () => {
     // console.log(numberFilter);
     // filtra as colunas removendo a coluna já selecionada da lista, depois seta a nova lista no state local
     const newColumns = columns.filter((col) => col !== numberFilter.column);
@@ -54,6 +54,21 @@ function Filters() {
       value: 0,
     });
   }, [columns]);
+
+  // remove o filtro da coluna especificada e insere ela novamente no dropdown
+  const handleClickDelete = (column) => {
+    const newFilterList = filterList.filter((filter) => filter.column !== column);
+    setFilterList(newFilterList);
+    setColumns([...columns, column]);
+  };
+
+  // deleta todos os filtros e seta novamente todas as colunas no dropdown
+  const handleClickDeleteAll = () => {
+    setColumns([
+      'population', 'orbital_period', 'diameter', 'rotation_period', 'surface_water',
+    ]);
+    setFilterList([]);
+  };
 
   return (
     <section>
@@ -112,7 +127,7 @@ function Filters() {
         <button
           data-testid="button-filter"
           type="button"
-          onClick={ handleClick }
+          onClick={ handleClickFilter }
           disabled={ columns.length === 0 }
         >
           Filtrar
@@ -121,9 +136,29 @@ function Filters() {
       <article>
         <h4>Filtros pesquisados:</h4>
         {filterList.map(({ column, comparison, value }, index) => (
-          <p key={ index }>{`${column} ${comparison} ${value}`}</p>
+          <div
+            key={ index }
+            data-testid="filter"
+          >
+            <p>
+              {`${column} ${comparison} ${value}`}
+            </p>
+            <button
+              type="button"
+              onClick={ () => handleClickDelete(column) }
+            >
+              X
+            </button>
+          </div>
         ))}
       </article>
+      <button
+        type="button"
+        data-testid="button-remove-filters"
+        onClick={ handleClickDeleteAll }
+      >
+        Remover Filtros
+      </button>
     </section>
   );
 }
