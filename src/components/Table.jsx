@@ -66,33 +66,35 @@ function Table() {
   }, [planets, nameFilter, filterList, sortPlanets]);
 
   return (
-    <table>
-      <thead>
-        <tr>
-          {headers.map((header) => (
-            <th key={ header }>{header}</th>
-          ))}
-        </tr>
-      </thead>
-      <tbody>
-        {
-          filteredPlanets.map((planet) => (
-            <tr key={ planet.name }>
-              {(Object.values(planet)).map((item, index) => {
-                if (index === 0) {
+    <div className="table-container">
+      <table>
+        <thead>
+          <tr>
+            {headers.map((header) => (
+              <th key={ header }>{header}</th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {
+            filteredPlanets.map((planet) => (
+              <tr key={ planet.name }>
+                {(Object.values(planet)).map((item, index) => {
+                  if (index === 0) {
+                    return (
+                      <td key={ index } data-testid="planet-name">{ item }</td>
+                    );
+                  }
                   return (
-                    <td key={ index } data-testid="planet-name">{ item }</td>
+                    <td key={ index }>{ item }</td>
                   );
-                }
-                return (
-                  <td key={ index }>{ item }</td>
-                );
-              })}
-            </tr>
-          ))
-        }
-      </tbody>
-    </table>
+                })}
+              </tr>
+            ))
+          }
+        </tbody>
+      </table>
+    </div>
   );
 }
 
