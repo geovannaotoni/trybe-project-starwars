@@ -1,0 +1,169 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  /* background-image: url('https://img.wallpapic-br.com/i8959-323-227/thumb/galaxia-roxos-espaco-sideral-nebulosa-imagem-de-fundo.jpg'); */
+  background-image: url('https://images5.alphacoders.com/548/548279.jpg');
+  background-size: cover;
+}
+
+header {
+  text-align: center;
+}
+
+header h1 {
+  color: white;
+  display: inline-block;
+  font-size: 4.5rem;
+  letter-spacing: 0.7rem;
+  margin: 1.5rem auto;
+  position: relative;
+  text-align: center;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.8) , 0 0 10px rgba(255, 255, 255, 0.8) , 0 0 30px white , 0 0 40px #754096;
+}
+
+main {
+  background-color: rgba(202, 202, 202, 0.5);
+  border-radius: 15px;
+  margin: 1rem;
+  padding: 2rem;
+}
+
+.name-filter {
+  width: 80%;
+}
+
+article {
+  text-align: center;
+}
+
+.name-filter-container, .filter-list-container, .sort-filter-container {
+  margin-bottom: 1rem;
+}
+
+.column-filter-container {
+  display: flex;
+  justify-content: space-between;
+  margin: 0 auto;
+  margin-bottom: 1rem;
+  width: 80%;
+}
+
+.filter-list-container > h4 {
+  font-size: 1.2rem;
+  margin: 0;
+}
+
+.filter-list {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+}
+
+.sort-filter-container {
+  align-items: center;
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.table-container {
+  background-color: white;
+  border-collapse: collapse;
+  overflow-x: auto;
+  white-space: nowrap;
+  width: 100%;
+}
+
+.table-container table {
+  width: 100%;
+}
+
+.table-container th, .table-container td {
+  border-bottom: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+.table-container th {
+  background-color: #2933822b;
+}
+
+.table-container tbody tr:nth-child( even ) {
+  background-color: rgba(41, 51, 130, 0.103);
+}
+
+.table-container tbody tr:hover {
+  background-color: #e9e9e9;
+}
+
+section {
+  margin: 1rem;
+}
+
+button {
+  background-color: #293482;
+  border: none;
+  border-radius: 4px;
+  color: white;
+  cursor: pointer;
+  font-size: 1.2rem;
+  font-weight: 700;
+  padding: 0.5rem 1rem;
+}
+
+button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+button:hover {
+  background-color: #754096;
+}
+
+button:focus {
+  box-shadow: 0 0 0 2px #754096;
+  outline: none;
+}
+
+input, select {
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1.1rem;
+  outline: none;
+  padding: 0.5rem;
+}
+
+/* Estilização dos filtros pesquisados */
+.filter-list-container p {
+  background-color: #3c1b7a;
+  border-radius: 4px;
+  color: white;
+  font-size: 1.1rem;
+  margin: 0.5rem;
+  padding: 0.5rem;
+}
+
+.filter-list-container button {
+  background-color: #3c1b7a;
+  border: none;
+  color: white;
+  cursor: pointer;
+  margin-left: 0.5rem;
+  padding: 0.5rem;
+}
+
+.filter-list-container button:hover {
+  background-color: #293bbf;
+}
+
+label {
+  align-items: center;
+  display: flex;
+  font-size: 1.2rem;
+  font-weight: 700;
+  gap: 0.5rem;
+}

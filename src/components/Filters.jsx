@@ -86,15 +86,16 @@ function Filters() {
 
   return (
     <section>
-      <article>
+      <article className="name-filter-container">
         <input
+          className="name-filter"
           type="text"
           data-testid="name-filter"
           placeholder="Filtre por Nome"
           onChange={ ({ target }) => setNameFilter(target.value) }
         />
       </article>
-      <article>
+      <article className="column-filter-container">
         <label htmlFor="column-filter">
           Coluna:
           <select
@@ -146,13 +147,21 @@ function Filters() {
         >
           Filtrar
         </button>
+        <button
+          type="button"
+          data-testid="button-remove-filters"
+          onClick={ handleClickDeleteAll }
+        >
+          Remover Filtros
+        </button>
       </article>
-      <article>
+      <article className="filter-list-container">
         <h4>Filtros pesquisados:</h4>
         {filterList.map(({ column, comparison, value }, index) => (
           <div
             key={ index }
             data-testid="filter"
+            className="filter-list"
           >
             <p>
               {`${column} ${comparison} ${value}`}
@@ -166,14 +175,7 @@ function Filters() {
           </div>
         ))}
       </article>
-      <button
-        type="button"
-        data-testid="button-remove-filters"
-        onClick={ handleClickDeleteAll }
-      >
-        Remover Filtros
-      </button>
-      <article>
+      <article className="sort-filter-container">
         <label htmlFor="column-sort">
           Ordenar
           <select
